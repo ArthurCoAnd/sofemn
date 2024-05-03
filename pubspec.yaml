@@ -1,0 +1,51 @@
+name: sofemn
+description: "Software de Ensino de Métodos Numéricos"
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  cupertino_icons: ^1.0.6
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.5
+  math_parser: ^1.5.1
+  syncfusion_flutter_charts: ^25.1.41+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+# flutter pub run flutter_native_splash:create
+flutter_native_splash:
+  color: "#8fbef0"
+  image: "assets/images/Lema.png"
+  android: true
+  ios: false
+  web: true
+
+# flutter pub run flutter_launcher_icons:main
+flutter_launcher_icons:
+  image_path: "assets/images/Lema.ico"
+  ios: false
+  remove_alpha_ios: true
+  android: "launcher_icon"
+  adaptative_icon_background: "#8fbef0"
+  adaptative_icon_foreground: "assets/images/Lema.ico"
+  web:
+    generate: true
+    image_path: "assets/images/Lema.ico"
+    background_color: "#8fbef0"
+    theme_color: "#8fbef0"
