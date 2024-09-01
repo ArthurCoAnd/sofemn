@@ -18,6 +18,10 @@ import 'package:flutter/material.dart';
 
 // SCREENS
 import 'package:sofemn/screens/zdf.dart';
+import 'package:sofemn/screens/zdp.dart';
+
+// WIDGET
+import 'package:sofemn/widgets/entradas.dart';
 
 void main() {
   runApp(const SofEMN());
@@ -73,26 +77,33 @@ class _MENUState extends State<MENU> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Center(child: Text('Software de Ensino de Métodos Numéricos'))),
-      body: ListView(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
-          child: Image.asset('assets/images/Lema Capa.png', height: 131),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
-          child: Center(child: Text('Versão $versao', style: const TextStyle(fontSize: 13))),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
-          child: ElevatedButton(
-            onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const ZdF()));},
-            style: ElevatedButton.styleFrom(minimumSize: const Size(0, 100)),
-            child: const Text('Zeros de Funções', style: TextStyle(fontSize: 20)),
+      // appBar: AppBar(title: const Text('Software de Ensino de Métodos Numéricos'), centerTitle: true),
+      body: SingleChildScrollView(
+        child: Center(
+          child: SizedBox(
+            width: 500,
+            child: ListView(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              children: [
+                SimpleP(child: Image.asset('assets/images/Lema Capa.png', height: 131)),
+                SimpleP(child: Center(child: Text('Versão $versao', style: const TextStyle(fontSize: 13)))),
+                SimpleP(child: ElevatedButton(
+                  onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const ZdF()));},
+                  style: ElevatedButton.styleFrom(minimumSize: const Size(0, 100)),
+                  child: const Text('Zeros de Funções', style: TextStyle(fontSize: 20)),
+                )),
+                SimpleP(child: ElevatedButton(
+                  onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const ZdP()));},
+                  style: ElevatedButton.styleFrom(minimumSize: const Size(0, 100)),
+                  child: const Text('Zeros de Polinômios', style: TextStyle(fontSize: 20)),
+                )),
+                const SimpleP(),
+              ],
+            ),
           ),
         ),
-        const Padding(padding: EdgeInsets.fromLTRB(13, 13, 13, 0)),
-      ]),
+      ),
     );
   }
 }

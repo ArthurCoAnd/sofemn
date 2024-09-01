@@ -73,55 +73,53 @@ class _ZdFState extends State<ZdF> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Zeros de Funções')),
-      body: ListView(children: [
-        Form(
-          key: formKey,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
-                child: completeDD(metodo, ['Bissecção', 'Posição Falsa', 'Newton-Raphson', 'Secante'], 'Método', atlMetodo)
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: dados.length,
-                itemBuilder: (context, index) => gerarEntrada(index),
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: SizedBox(
+            width: 500,
+            child: ListView(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              children: [
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
+                        child: SimpleDD(metodo, const ['Bissecção', 'Posição Falsa', 'Newton-Raphson', 'Secante'], 'Método', func: atlMetodo)
+                      ),
+                      ListView.builder(
+                        physics: const ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: dados.length,
+                        itemBuilder: (context, index) => gerarEntrada(index),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
+                  child: ElevatedButton(
+                    onPressed: () => calcular(),
+                    style: ElevatedButton.styleFrom(minimumSize: const Size(0, 100)),
+                    child: const Text('Calcular', style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+                if(resultados.isNotEmpty) tabelaResultado,
+                if(resultados.isNotEmpty) Padding(
+                  padding: const EdgeInsets.fromLTRB(13, 13, 13, 13),
+                  child: ElevatedButton(
+                    onPressed: () => passoPasso(),
+                    style: ElevatedButton.styleFrom(minimumSize: const Size(0, 100)),
+                    child: const Text('Passo a Passo', style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
-          child: ElevatedButton(
-            onPressed: (){
-              if (formKey.currentState!.validate()) {
-                for(int i=0; i<dados.length; i++){setState((){dados[dados.keys.elementAt(i)]['val'] = dados[dados.keys.elementAt(i)]['tec'].text.replaceAll(',','.');});}
-                if(metodo.value == 'Bissecção'){setState((){resultados = calcBisseccao(dados);}); gerarResultado();}
-                else if(metodo.value == 'Posição Falsa'){setState((){resultados = calcPosicaoFalsa(dados);}); gerarResultado();}
-                else if(metodo.value == 'Newton-Raphson'){setState((){resultados = calcNewtonRaphson(dados);}); gerarResultado();}
-                else if(metodo.value == 'Secante'){setState((){resultados = calcSecante(dados);}); gerarResultado();}
-                else{setState((){resultados = [];}); gerarResultado();}
-              }
-            },
-            style: ElevatedButton.styleFrom(minimumSize: const Size(0, 100)),
-            child: const Text('Calcular', style: TextStyle(fontSize: 20)),
-          ),
-        ),
-        if(resultados.isNotEmpty) tabelaResultado,
-        if(resultados.isNotEmpty) Padding(
-          padding: const EdgeInsets.fromLTRB(13, 13, 13, 13),
-          child: ElevatedButton(
-            onPressed: (){
-              if(metodo.value == 'Bissecção'){Navigator.push(context, MaterialPageRoute(builder: (context) => Bissecao(sf: dados['sf']['val'], resultados: resultados)));}
-              else if(metodo.value == 'Posição Falsa'){Navigator.push(context, MaterialPageRoute(builder: (context) => PosicaoFalsa(sf: dados['sf']['val'], resultados: resultados)));}
-              else if(metodo.value == 'Newton-Raphson'){Navigator.push(context, MaterialPageRoute(builder: (context) => NewtonRaphson(sf: dados['sf']['val'], sdf: dados['sdf']['val'], resultados: resultados)));}
-              else if(metodo.value == 'Secante'){Navigator.push(context, MaterialPageRoute(builder: (context) => Secante(sf: dados['sf']['val'], resultados: resultados)));}
-            },
-            style: ElevatedButton.styleFrom(minimumSize: const Size(0, 100)),
-            child: const Text('Passo a Passo', style: TextStyle(fontSize: 20)),
-          ),
-        ),
-      ]),
+      ),
     );
   }
 
@@ -132,12 +130,23 @@ class _ZdFState extends State<ZdF> {
       visible: vis,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
-        child: simpleTFF(dados[ki]['tec'], dados[ki]['nome']),
+        child: SimpleTFF(dados[ki]['tec'], dados[ki]['nome']),
       ),
     );
   }
 
   void atlMetodo(){setState((){resultados = [];});}
+
+  void calcular(){
+    if (formKey.currentState!.validate()) {
+      for(int i=0; i<dados.length; i++){setState((){dados[dados.keys.elementAt(i)]['val'] = dados[dados.keys.elementAt(i)]['tec'].text.replaceAll(',','.');});}
+      if(metodo.value == 'Bissecção'){setState((){resultados = calcBisseccao(dados);}); gerarResultado();}
+      else if(metodo.value == 'Posição Falsa'){setState((){resultados = calcPosicaoFalsa(dados);}); gerarResultado();}
+      else if(metodo.value == 'Newton-Raphson'){setState((){resultados = calcNewtonRaphson(dados);}); gerarResultado();}
+      else if(metodo.value == 'Secante'){setState((){resultados = calcSecante(dados);}); gerarResultado();}
+      else{setState((){resultados = [];}); gerarResultado();}
+    }
+  }
 
   void gerarResultado(){
     if(resultados.isNotEmpty){
@@ -146,5 +155,12 @@ class _ZdFState extends State<ZdF> {
         child: Table(children: gerarLinhasTabelaK(context, resultados, resultados.length-1)),
       );});
     } else {setState((){tabelaResultado = const Text('');});}
+  }
+
+  void passoPasso(){
+    if(metodo.value == 'Bissecção'){Navigator.push(context, MaterialPageRoute(builder: (context) => Bissecao(sf: dados['sf']['val'], resultados: resultados)));}
+    else if(metodo.value == 'Posição Falsa'){Navigator.push(context, MaterialPageRoute(builder: (context) => PosicaoFalsa(sf: dados['sf']['val'], resultados: resultados)));}
+    else if(metodo.value == 'Newton-Raphson'){Navigator.push(context, MaterialPageRoute(builder: (context) => NewtonRaphson(sf: dados['sf']['val'], sdf: dados['sdf']['val'], resultados: resultados)));}
+    else if(metodo.value == 'Secante'){Navigator.push(context, MaterialPageRoute(builder: (context) => Secante(sf: dados['sf']['val'], resultados: resultados)));}
   }
 }

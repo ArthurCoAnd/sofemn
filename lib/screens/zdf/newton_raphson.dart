@@ -62,49 +62,50 @@ class _NewtonRaphsonState extends State<NewtonRaphson> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Newton-Raphson')),
-      body: ListView(children: [
+      body: Column(children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
           child: Table(children: linhasTabelaNewtonRaphsonK),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
-          child: SfCartesianChart(
-            // tooltipBehavior: TooltipBehavior(enable: true, decimalPlaces: (1/resultados[k]['erro']).round()+2),
-            // trackballBehavior: TrackballBehavior(enable: true, activationMode: ActivationMode.singleTap, tooltipDisplayMode: TrackballDisplayMode.nearestPoint),
-            legend: const Legend(isVisible: true),
-            primaryXAxis: const NumericAxis(),
-            primaryYAxis: const NumericAxis(rangePadding: ChartRangePadding.additional),
-            series: seriesGraficoNewtonRaphsonK,
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(13, 13, 13, 0),
+            child: SfCartesianChart(
+              legend: const Legend(isVisible: true),
+              primaryXAxis: const NumericAxis(),
+              primaryYAxis: const NumericAxis(rangePadding: ChartRangePadding.additional),
+              series: seriesGraficoNewtonRaphsonK,
+            ),
           ),
         ),
-      ]),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
+        Row(children: [
+          Expanded(child: Padding(
             padding: const EdgeInsets.all(13),
-            child: FloatingActionButton(
-              backgroundColor: k>0 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.inversePrimary,
-              heroTag: null,
+            child: ElevatedButton.icon(
               onPressed: (){if(k>0){subK();}},
-              tooltip: 'Iteração Anterior',
-              child: const Icon(Icons.arrow_back),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(0, 50),
+                backgroundColor: k>0 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.inversePrimary
+              ),
+              icon: const Icon(Icons.arrow_back),
+              label: const Text('Iteração Anterior', style: TextStyle(fontSize: 20)),
             ),
-          ),
-          Padding(
+          )),
+          Expanded(child: Padding(
             padding: const EdgeInsets.all(13),
-            child: FloatingActionButton(
-              backgroundColor: (k<resultados.length-1) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.inversePrimary,
-              heroTag: null,
+            child: ElevatedButton.icon(
               onPressed: (){if(k<resultados.length-1){addK();}},
-              tooltip: 'Próxima Iteração',
-              child: const Icon(Icons.arrow_forward),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(0, 50),
+                backgroundColor: (k<resultados.length-1) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.inversePrimary
+              ),
+              iconAlignment: IconAlignment.end,
+              icon: const Icon(Icons.arrow_forward),
+              label: const Text('Próxima Iteração', style: TextStyle(fontSize: 20)),
             ),
-          ),
-        ],
-      ),
+          )),
+        ]),
+      ]),
     );
   }
 
